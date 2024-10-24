@@ -26,7 +26,7 @@ namespace HotelRegistration
                     ));
 
                 hotel.MakeReservation(new Reservation(
-                    new Room(1, 3),
+                    new Room(1, 2),
                     "Jane Eyre",
                     new DateTime(2024, 10, 15),
                     new DateTime(2024, 10, 22)

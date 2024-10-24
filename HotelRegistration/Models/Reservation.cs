@@ -10,17 +10,17 @@ namespace HotelRegistration.Models
     {
         public Room Room { get; }
         public string VisitorName { get; }
-        public DateTime StartTime { get; }
-        public DateTime EndTime { get; }
+        public DateTime StartDate { get; }
+        public DateTime EndDate { get; }
 
-        public int DaysReserved => (int) EndTime.Subtract(StartTime).TotalDays;
+        public int DaysReserved => (int) EndDate.Subtract(StartDate).TotalDays;
 
 
         public Reservation(Room room, string visitorName, DateTime startTime, DateTime endTime)
         {
             Room = room;
-            StartTime = startTime;
-            EndTime = endTime;
+            StartDate = startTime;
+            EndDate = endTime;
             VisitorName = visitorName;
         }
 
@@ -28,8 +28,8 @@ namespace HotelRegistration.Models
         {
             return other.Room.Equals(Room)
                 && other.VisitorName != VisitorName
-                && other.StartTime <= EndTime
-                &&  other.EndTime >= StartTime;            
+                && other.StartDate <= EndDate
+                &&  other.EndDate >= StartDate;            
         }
 
 

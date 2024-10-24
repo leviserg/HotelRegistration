@@ -17,6 +17,17 @@ namespace HotelRegistration.Models
             _reservationBook = new ReservationBook();
             Name = name;
         }
+
+        /// <summary>
+        /// Get the reservations for a user.
+        /// </summary>
+        /// <param name="sortKey">SortKey : Room, StartDate, EndDate, VisitorName, DaysReserved</param>
+        /// <param name="sortDesc">SortOrder Asc By Default</param>
+        /// <returns>Reservations sorted</returns>
+        public IEnumerable<Reservation> GetReservations(string sortKey, bool sortDesc)
+        {
+            return _reservationBook.GetReservations(sortKey, sortDesc);
+        }
         /// <summary>
         /// Get the reservations for a user.
         /// </summary>
