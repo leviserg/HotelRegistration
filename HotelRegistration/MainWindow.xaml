@@ -12,7 +12,7 @@
         FontSize="14"
         Height="450" Width="800">
     <Grid Margin="20 10" MaxWidth="600">
-        <!--<views:MakeReservationView />-->
-        <views:ReservationListView />
+        <views:ReservationListView DataContext="{Binding CurrentViewModel}"/>
+        <!--<views:MakeReservationView DataContext="{Binding CurrentViewModel}"/>-->
     </Grid>
 </Window>

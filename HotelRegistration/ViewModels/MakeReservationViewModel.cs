@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HotelRegistration.Commands;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,7 @@ namespace HotelRegistration.ViewModels
 {
     public class MakeReservationViewModel : ViewModelBase
     {
+        
         private string? _visitorName;
         private int _floorNumber;
         private int _roomNumber;
@@ -61,14 +63,13 @@ namespace HotelRegistration.ViewModels
                 _endDate = value; OnPropertyChanged(nameof(EndDate));
             }
         }
-
+        
         public ICommand SubmitCommand { get; }
-
         public ICommand CancelCommand { get; }
 
         public MakeReservationViewModel()
         {
-            
+            SubmitCommand = new MakeReservationCommand();
         }
     }
 }

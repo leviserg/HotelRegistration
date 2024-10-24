@@ -26,9 +26,11 @@ namespace HotelRegistration.Views
             InitializeComponent();
         }
 
+        
         private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
         {
-            e.Handled = int.TryParse(e.Text, out int result);
+            e.Handled = !int.TryParse(e.Text, out int result);
         }
+        
     }
 }

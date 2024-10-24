@@ -18,14 +18,10 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Grid.Column="0"  Style="{StaticResource Header}"  Text="View reservations"/>
-            <Button Grid.Column="1" Margin="10 0 0 0" Content="Make reservation"/>
+            <Button Grid.Column="1" Margin="10 0 0 0" Content="Make reservation" Command="{Binding NavigateToMakeReservationPage}"/>
         </Grid>
 
-        <ListView Grid.Row="1" Margin="0 20 0 0">
-            <ListViewItem/>
-            <ListViewItem/>
-            <ListViewItem/>
-            <ListViewItem/>
+        <ListView Grid.Row="1" Margin="0 20 0 0" ItemsSource="{Binding Reservations}">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -34,38 +30,38 @@
             
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Room" DisplayMemberBinding="{Binding Path=Room.ToString()}">
+                    <GridViewColumn Header="Room">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Padding="0 0 20 0" HorizontalAlignment="Center" Text="101"/>
+                                <TextBlock HorizontalAlignment="Center" Text="{Binding Room}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Visitor">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Padding="0 0 20 0" Text="John Doe"/>
+                                <TextBlock Width="270" HorizontalAlignment="Left" Text="{Binding VisitorName}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Start date">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Padding="0 0 20 0" HorizontalAlignment="Right" Text="12-10-2024"/>
+                                <TextBlock Padding="0 0 10 0" HorizontalAlignment="Right" Text="{Binding StartDate}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="End date">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Padding="0 0 20 0" HorizontalAlignment="Right" Text="15-10-2024"/>
+                                <TextBlock Padding="0 0 10 0" HorizontalAlignment="Right" Text="{Binding EndDate}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                     <GridViewColumn Header="Length, days">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBlock Padding="0 0 20 0" HorizontalAlignment="Center" Text="3"/>
+                                <TextBlock HorizontalAlignment="Center" Text="{Binding DaysReserved}"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
