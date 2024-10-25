@@ -1,4 +1,5 @@
 ﻿using HotelRegistration.Exceptions;
+using HotelRegistration.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.DirectoryServices;
@@ -21,15 +22,16 @@ namespace HotelRegistration.Models
 
         public IEnumerable<Reservation> GetReservations(string sortKey = defaultSortKey, bool sortDesc = false)
         {
+            
             PropertyInfo prop = typeof(Reservation).GetProperty(sortKey);
             if (prop == null)
                 prop = typeof(Reservation).GetProperty(defaultSortKey);
 
             if (sortDesc) {
-                return _reservations.OrderByDescending(r => prop.GetValue(r)).ThenBy(r => r.EndDate);
+                return _reservations.OrderByDescending(r => prop.GetValue(r).ToString()).ThenBy(r => r.EndDate);
             }
-
-            return _reservations.OrderBy(r => prop.GetValue(r)).ThenBy(r => r.EndDate);
+            
+            return _reservations.OrderBy(r => prop.GetValue(r).ToString()).ThenBy(r => r.EndDate);
         }
 
         public IEnumerable<Reservation> GetReservationsByVisitor(Visitor visitor) { 

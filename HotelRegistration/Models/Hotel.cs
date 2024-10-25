@@ -9,6 +9,8 @@ namespace HotelRegistration.Models
     public class Hotel
     {
         private readonly ReservationBook _reservationBook;
+        private const string defaultSortKey = nameof(Room);
+        private const bool defaultDescSortOrder = false;
 
         public string Name { get; }
 
@@ -24,7 +26,7 @@ namespace HotelRegistration.Models
         /// <param name="sortKey">SortKey : Room, StartDate, EndDate, VisitorName, DaysReserved</param>
         /// <param name="sortDesc">SortOrder Asc By Default</param>
         /// <returns>Reservations sorted</returns>
-        public IEnumerable<Reservation> GetReservations(string sortKey, bool sortDesc)
+        public IEnumerable<Reservation> GetReservations(string sortKey = defaultSortKey, bool sortDesc = defaultDescSortOrder)
         {
             return _reservationBook.GetReservations(sortKey, sortDesc);
         }

@@ -1,5 +1,6 @@
 ﻿using HotelRegistration.Commands;
 using HotelRegistration.Models;
+using HotelRegistration.Services;
 using HotelRegistration.Stores;
 using System;
 using System.Collections.Generic;
@@ -13,21 +14,32 @@ namespace HotelRegistration.ViewModels
 {
     public class ReservationListViewModel : ViewModelBase
     {
+        private readonly Hotel _hotel;
         private readonly ObservableCollection<ReservationViewModel> _reservations;
         public IEnumerable<ReservationViewModel> Reservations => _reservations;
 
         public ICommand? NavigateToMakeReservationPage { get; }
 
-        public ReservationListViewModel(NavigationStore navigationStore, Func<MakeReservationViewModel> navigateToViewModel)
+        public ReservationListViewModel(Hotel hotel, ViewModelNavigationService navigationService)
         {
+            _hotel = hotel;
             _reservations = new ObservableCollection<ReservationViewModel>();
 
-            _reservations.Add(new ReservationViewModel(new Reservation(new Room(1, 1), "John Doe", DateTime.Now, DateTime.Now.AddDays(2))));
-            _reservations.Add(new ReservationViewModel(new Reservation(new Room(1, 2), "Jane Smith", DateTime.Now, DateTime.Now.AddDays(3))));
-            _reservations.Add(new ReservationViewModel(new Reservation(new Room(1, 3), "Nick Smart", DateTime.Now, DateTime.Now.AddDays(4))));
-            _reservations.Add(new ReservationViewModel(new Reservation(new Room(1, 4), "Jack Fun", DateTime.Now, DateTime.Now.AddDays(5))));
+            NavigateToMakeReservationPage = new NavigateCommand(navigationService);
 
-            NavigateToMakeReservationPage = new NavigateCommand(navigationStore, navigateToViewModel);
+            UpdateReservations();
+        }
+
+        private void UpdateReservations()
+        {
+            _reservations.Clear();
+            var currentReservations = _hotel.GetReservations("Room", true);
+            foreach (var reservation in currentReservations)
+            {
+                ReservationViewModel reservationViewModel = new ReservationViewModel(reservation);
+                _reservations.Add(reservationViewModel);
+            }
+
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using HotelRegistration.Models;
+using HotelRegistration.Services;
 using HotelRegistration.Stores;
 using HotelRegistration.ViewModels;
 using System;
@@ -11,20 +12,16 @@ namespace HotelRegistration.Commands
 {
     public class NavigateCommand : CommandBase
     {
-        private readonly NavigationStore _navigationStore;
-        private readonly Func<ViewModelBase> _navigateTo;
+        private readonly ViewModelNavigationService _navigationService;
 
-        public NavigateCommand(NavigationStore navigationStore, Func<ViewModelBase> navigateTo)
+        public NavigateCommand(ViewModelNavigationService navigationService)
         {
-            _navigationStore = navigationStore;
-            _navigateTo = navigateTo;
+            _navigationService = navigationService;
         }
-
-
 
         public override void Execute(object parameter)
         {
-            _navigationStore.CurrentViewModel = _navigateTo();
+            _navigationService.Navigate();
         }
     }
 }
