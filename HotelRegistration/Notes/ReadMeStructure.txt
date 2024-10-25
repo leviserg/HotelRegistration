@@ -42,3 +42,22 @@ Binding dynamically ViewModels to MainWindow.xaml
 	</Grid.Resources>
 3. Add "ContentControl" to the "Grid" element (after "Grid.Resources")
 	<ContentControl Content="{Binding CurrentViewModel}"/>
+-------------------
+Data Persistance w EntityFramework
+1. Install NuGet package
+	Microsoft.EntityFrameworkCore (check compatibility with .NET 8 version)
+	Microsoft.EntityFrameworkCore.Tools 
+		{
+			Enables these commonly used commands:
+			 - Add-Migration
+			 - Bundle-Migration
+			 - Drop-Database
+			 - Get-DbContext
+			 - Get-Migration
+			 - Optimize-DbContext
+			 - Remove-Migration
+			 - Scaffold-DbContext
+			 - Script-Migration
+			 - Update-Database
+		}
+	Microsoft.EntityFrameworkCore.SqlServer
