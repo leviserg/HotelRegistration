@@ -1,4 +1,5 @@
 ﻿using HotelRegistration.Commands;
+using HotelRegistration.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,8 +15,8 @@ namespace HotelRegistration.ViewModels
         private string? _visitorName;
         private int _floorNumber;
         private int _roomNumber;
-        private DateTime? _startDate;
-        private DateTime? _endDate;
+        private DateTime? _startDate = DateTime.Now;
+        private DateTime? _endDate = DateTime.Now.AddDays(3);
         public string VisitorName
         {
             get => _visitorName ?? string.Empty;
@@ -51,7 +52,7 @@ namespace HotelRegistration.ViewModels
             get { return _startDate; }
             set
             {
-                _endDate = value; OnPropertyChanged(nameof(StartDate));
+                _startDate = value; OnPropertyChanged(nameof(StartDate));
             }
         }
 
@@ -67,9 +68,10 @@ namespace HotelRegistration.ViewModels
         public ICommand SubmitCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public MakeReservationViewModel()
+        public MakeReservationViewModel(Hotel hotel)
         {
-            SubmitCommand = new MakeReservationCommand();
+            SubmitCommand = new MakeReservationCommand(hotel, this);
+            CancelCommand = new CancelReservationCommand();
         }
     }
 }

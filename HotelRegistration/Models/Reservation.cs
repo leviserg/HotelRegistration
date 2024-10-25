@@ -1,4 +1,5 @@
-﻿using System;
+﻿using HotelRegistration.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,14 @@ namespace HotelRegistration.Models
             VisitorName = visitorName;
         }
 
+        public Reservation(MakeReservationViewModel viewModel)
+        {
+            Room = new Room(viewModel.FloorNumber, viewModel.RoomNumber);
+            StartDate = viewModel.StartDate.Value;
+            EndDate = viewModel.EndDate.Value;
+            VisitorName = viewModel.VisitorName;
+        }
+
         public bool Conflicts(Reservation other)
         {
             return other.Room.Equals(Room)
@@ -31,7 +40,6 @@ namespace HotelRegistration.Models
                 && other.StartDate <= EndDate
                 &&  other.EndDate >= StartDate;            
         }
-
 
     }
 }
