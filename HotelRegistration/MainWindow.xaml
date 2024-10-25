@@ -6,13 +6,24 @@
         
         xmlns:local="clr-namespace:HotelRegistration"
         xmlns:views="clr-namespace:HotelRegistration.Views"
+        xmlns:viewModels="clr-namespace:HotelRegistration.ViewModels"
         
         mc:Ignorable="d"
         Title="Hotel registration" 
         FontSize="14"
         Height="450" Width="800">
     <Grid Margin="20 10" MaxWidth="600">
-        <views:ReservationListView DataContext="{Binding CurrentViewModel}"/>
+        <Grid.Resources>
+            <DataTemplate DataType="{x:Type viewModels:MakeReservationViewModel}">
+                <views:MakeReservationView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewModels:ReservationListViewModel}">
+                <views:ReservationListView/>
+            </DataTemplate>
+        </Grid.Resources>
+
+        <ContentControl Content="{Binding CurrentViewModel}"/>
+        <!--<views:ReservationListView DataContext="{Binding CurrentViewModel}"/>-->
         <!--<views:MakeReservationView DataContext="{Binding CurrentViewModel}"/>-->
     </Grid>
 </Window>

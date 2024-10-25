@@ -27,11 +27,18 @@ App.xaml.cs
 			|-> virtual method - contains some default logic and MAY be overrided in a subclass
 }
 
-Main
-
-            /*
-            _reservations.Add(new ReservationViewModel(new Reservation(new Room(1, 1), "John Doe", DateTime.Now, DateTime.Now.AddDays(2))));
-            _reservations.Add(new ReservationViewModel(new Reservation(new Room(1, 2), "Jane Smith", DateTime.Now, DateTime.Now.AddDays(3))));
-            _reservations.Add(new ReservationViewModel(new Reservation(new Room(1, 3), "Nick Smart", DateTime.Now, DateTime.Now.AddDays(4))));
-            _reservations.Add(new ReservationViewModel(new Reservation(new Room(1, 4), "Jack Fun", DateTime.Now, DateTime.Now.AddDays(5))));
-            */
+Stores.NavigationStore - an example of Mediator object - it instantiates within App.xaml.cs as instance in constructor and passed to MainViewModel as a property to set CurrentViewModel.
+-------------------
+Binding dynamically ViewModels to MainWindow.xaml
+1. Add namespace for Window xml element "xmlns:viewModels="clr-namespace:HotelRegistration.ViewModels"
+2. Add "Grid.Resources" element to the "Grid" instead of hardcoded "<views:MakeReservationView DataContext="{...}">"
+	<Grid.Resources>
+		<DataTemplate DataType="{x:Type viewModels:MakeReservationViewModel}">
+			<views:MakeReservationView/>
+		</DataTemplate>
+		<DataTemplate DataType="{x:Type viewModels:ReservationListViewModel}">
+			<views:ReservationListView/>
+		</DataTemplate>
+	</Grid.Resources>
+3. Add "ContentControl" to the "Grid" element (after "Grid.Resources")
+	<ContentControl Content="{Binding CurrentViewModel}"/>
