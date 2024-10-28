@@ -13,6 +13,11 @@ namespace HotelRegistration.Exceptions
 
         public Reservation BookedReservation { get; }
         public Reservation IncomingReservation { get; }
+
+        public ReservationConflictException(Reservation incomingReservation)
+        {
+            IncomingReservation = incomingReservation;
+        }
         public ReservationConflictException(Reservation bookedReservation, Reservation incomingReservation)
         {
             BookedReservation = bookedReservation;

@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 
 namespace HotelRegistration.Commands
 {
-    public class MakeReservationCommand : CommandBase
+    public class MakeReservationCommand : AsyncCommandBase
     {
         private readonly Hotel _hotel;
         private readonly MakeReservationViewModel _viewModel;
@@ -36,15 +36,15 @@ namespace HotelRegistration.Commands
                 && base.CanExecute(parameter);
         }
 
-        public override void Execute(object parameter)
+        public override async Task ExecuteAsync(object parameter)
         {
 
             try
             {
                 Reservation reservation = new Reservation(_viewModel);
-                _hotel.MakeReservation(reservation);
+                var reservationId = await _hotel.MakeReservation(reservation);
 
-                MessageBox.Show("Room successfully reserved", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show($"Room successfully reserved,\n Reservation Id = {reservationId}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
                 _navigationService.Navigate();
 
@@ -55,6 +55,7 @@ namespace HotelRegistration.Commands
             }
             catch (Exception ex) {
                 Debug.WriteLine(ex.Message);
+                MessageBox.Show("Failed to make reservation", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 throw;
             }
 

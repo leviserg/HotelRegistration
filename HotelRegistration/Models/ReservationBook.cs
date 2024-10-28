@@ -1,4 +1,7 @@
 ﻿using HotelRegistration.Exceptions;
+using HotelRegistration.Services.ReservationCreators;
+using HotelRegistration.Services.ReservationProviders;
+using HotelRegistration.Services.Validators;
 using HotelRegistration.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -12,47 +15,57 @@ namespace HotelRegistration.Models
 {
     public class ReservationBook
     {
-        private readonly List<Reservation> _reservations;
+        private readonly IReservationProvider _reservationProvider;
+        private readonly IReservationCreator _reservationCreator;
+        private readonly IConflictValidator _conflictValidator;
         private const string defaultSortKey = nameof(Room);
 
-        public ReservationBook()
+        public ReservationBook(
+            IReservationProvider reservationProvider,
+            IReservationCreator reservationCreator,
+            IConflictValidator conflictValidator
+            )
         {
-            _reservations = new List<Reservation>();
+            _reservationProvider = reservationProvider;
+            _reservationCreator = reservationCreator;
+            _conflictValidator = conflictValidator;
         }
 
-        public IEnumerable<Reservation> GetReservations(string sortKey = defaultSortKey, bool sortDesc = false)
+        public async Task<IEnumerable<Reservation>> GetReservations(string sortKey = defaultSortKey, bool sortDesc = false)
         {
             
             PropertyInfo prop = typeof(Reservation).GetProperty(sortKey);
             if (prop == null)
                 prop = typeof(Reservation).GetProperty(defaultSortKey);
 
+            var reservations = await _reservationProvider.GetReservationsAsync();
+
             if (sortDesc) {
-                return _reservations.OrderByDescending(r => prop.GetValue(r).ToString()).ThenBy(r => r.EndDate);
+                return reservations.OrderByDescending(r => prop.GetValue(r).ToString()).ThenBy(r => r.EndDate);
             }
             
-            return _reservations.OrderBy(r => prop.GetValue(r).ToString()).ThenBy(r => r.EndDate);
+            return reservations.OrderBy(r => prop.GetValue(r).ToString()).ThenBy(r => r.EndDate);
         }
 
-        public IEnumerable<Reservation> GetReservationsByVisitor(Visitor visitor) { 
-            return _reservations.Where(r => r.VisitorName == visitor.Name);
+        public async Task<IEnumerable<Reservation>> GetReservationsByVisitor(Visitor visitor) {
+            var reservations = await _reservationProvider.GetReservationsAsync();
+            return reservations.Where(r => r.VisitorName == visitor.Name);
         }
 
-        public IEnumerable<Reservation> GetReservationsByRoom(Room room)
+        public async Task<IEnumerable<Reservation>> GetReservationsByRoom(Room room)
         {
-            return _reservations.Where(r => r.Room.Equals(room));
+            var reservations = await _reservationProvider.GetReservationsAsync();
+            return reservations.Where(r => r.Room.Equals(room));
         }
 
-        public void AddReservation(Reservation reservation) {
+        public async Task<int> AddReservation(Reservation reservation) {
 
-            _reservations.ForEach(r =>
-            {
-                if (r.Conflicts(reservation)) {
-                    throw new ReservationConflictException(r, reservation);
-                }
-            });
+            var existingReservation = await _conflictValidator.HasConflictWith(reservation);
 
-            _reservations.Add(reservation);
+            if (existingReservation is not null) {
+                throw new ReservationConflictException(existingReservation, reservation);
+            }
+            return await _reservationCreator.CreateReservationAsync(reservation);
         }
     }
 }

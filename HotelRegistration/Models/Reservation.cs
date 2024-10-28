@@ -33,13 +33,5 @@ namespace HotelRegistration.Models
             VisitorName = viewModel.VisitorName;
         }
 
-        public bool Conflicts(Reservation other)
-        {
-            return other.Room.Equals(Room)
-                && other.VisitorName != VisitorName
-                && other.StartDate <= EndDate
-                &&  other.EndDate >= StartDate;            
-        }
-
     }
 }

@@ -44,6 +44,7 @@ Binding dynamically ViewModels to MainWindow.xaml
 	<ContentControl Content="{Binding CurrentViewModel}"/>
 -------------------
 Data Persistance w EntityFramework
+0. Install SQL Express as an Docker Container Instance (see DockerNotes.txt)
 1. Install NuGet package
 	Microsoft.EntityFrameworkCore (check compatibility with .NET 8 version)
 	Microsoft.EntityFrameworkCore.Tools 
@@ -61,3 +62,19 @@ Data Persistance w EntityFramework
 			 - Update-Database
 		}
 	Microsoft.EntityFrameworkCore.SqlServer
+2. Create folders DbContext & DTOs (Data Transfer Object - used for transfer data btw app and db layer) + add Dto class + IDesignTimeDbContextFactory class 
+	***
+	public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<HotelReservationDbContext>
+    {
+        public HotelReservationDbContext CreateDbContext(string[] args)
+        {
+            string connectionString = "Server=127.0.0.1:1433;Database=HotelReservation;Uid=developer;Pwd=Xiaomi_MI3;";
+            var options = new DbContextOptionsBuilder().UseSqlServer(connectionString).Options;
+            return new HotelReservationDbContext(options);
+        }
+    }
+	***
+3. Add migration within Package manager console
+	PM > add-migration Initial  (undo - Remove-Migration)
+	PM > update-database (remove - if applied - Remove-Migration -Force)
+	

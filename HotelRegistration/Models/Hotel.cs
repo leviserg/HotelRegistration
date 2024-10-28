@@ -14,9 +14,9 @@ namespace HotelRegistration.Models
 
         public string Name { get; }
 
-        public Hotel(string name)
+        public Hotel(string name, ReservationBook reservationBook)
         {
-            _reservationBook = new ReservationBook();
+            _reservationBook = reservationBook;
             Name = name;
         }
 
@@ -26,35 +26,35 @@ namespace HotelRegistration.Models
         /// <param name="sortKey">SortKey : Room, StartDate, EndDate, VisitorName, DaysReserved</param>
         /// <param name="sortDesc">SortOrder Asc By Default</param>
         /// <returns>Reservations sorted</returns>
-        public IEnumerable<Reservation> GetReservations(string sortKey = defaultSortKey, bool sortDesc = defaultDescSortOrder)
+        public async Task<IEnumerable<Reservation>> GetReservations(string sortKey = defaultSortKey, bool sortDesc = defaultDescSortOrder)
         {
-            return _reservationBook.GetReservations(sortKey, sortDesc);
+            return await _reservationBook.GetReservations(sortKey, sortDesc);
         }
         /// <summary>
         /// Get the reservations for a user.
         /// </summary>
         /// <param name="visitor">The incoming visitor.</param>
         /// <returns>The reservations for a user.</returns>
-        public IEnumerable<Reservation> GetReservationsByVisitor(Visitor visitor)
+        public async Task<IEnumerable<Reservation>> GetReservationsByVisitor(Visitor visitor)
         {
-            return _reservationBook.GetReservationsByVisitor(visitor);
+            return await _reservationBook.GetReservationsByVisitor(visitor);
         }
         /// <summary>
         /// Get the reservations for a specific room.
         /// </summary>
         /// <param name="room">Room selected.</param>
         /// <returns>The reservations for a specific room.</returns>
-        public IEnumerable<Reservation> GetReservationsByRoom(Room room)
+        public async Task<IEnumerable<Reservation>> GetReservationsByRoom(Room room)
         {
-            return _reservationBook.GetReservationsByRoom(room);
+            return await _reservationBook.GetReservationsByRoom(room);
         }
         /// <summary>
         /// Make a reservation.
         /// </summary>
         /// <param name="reservation">Incoming reservation.</param>
         /// <exception cref="ReservationConflictException"
-        public void MakeReservation(Reservation reservation) { 
-            _reservationBook.AddReservation(reservation);
+        public async Task<int> MakeReservation(Reservation reservation) { 
+            return await _reservationBook.AddReservation(reservation);
         }
     }
 }
