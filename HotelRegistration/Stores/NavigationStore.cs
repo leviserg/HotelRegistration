@@ -13,6 +13,7 @@ namespace HotelRegistration.Stores
         public ViewModelBase CurrentViewModel { 
             get => _currentViewModel; 
             set  {
+                _currentViewModel?.Dispose(); // call when navigate from previous viewModel -> current
                 _currentViewModel = value;
                 OnCurrentViewModelChanged();
             }

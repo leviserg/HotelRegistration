@@ -1,6 +1,7 @@
 ﻿using HotelRegistration.Exceptions;
 using HotelRegistration.Models;
 using HotelRegistration.Services;
+using HotelRegistration.Stores;
 using HotelRegistration.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -16,12 +17,12 @@ namespace HotelRegistration.Commands
 {
     public class LoadReservationsCommand : AsyncCommandBase
     {
-        private readonly Hotel _hotel;
+        private readonly ReservationCacheStore _cache;
         private readonly ReservationListViewModel _viewModel;
 
-        public LoadReservationsCommand(Hotel hotel, ReservationListViewModel viewModel)
+        public LoadReservationsCommand(ReservationCacheStore cache, ReservationListViewModel viewModel)
         {
-            _hotel = hotel;
+            _cache = cache;
             _viewModel = viewModel;
         }
 
@@ -29,8 +30,10 @@ namespace HotelRegistration.Commands
         {
             try
             {
-                IEnumerable<Reservation> reservations = await _hotel.GetReservations();
-                _viewModel.UpdateReservations(reservations);
+
+                await _cache.Load();
+                _viewModel.UpdateReservations(_cache.Reservations);
+                await Task.CompletedTask;
             }
             catch (Exception ex) {
                 Debug.WriteLine(ex.Message);

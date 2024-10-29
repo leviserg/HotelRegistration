@@ -70,9 +70,9 @@ namespace HotelRegistration.ViewModels
         public ICommand SubmitCommand { get; }
         public ICommand CancelCommand { get; }
 
-        public MakeReservationViewModel(Hotel hotel, ViewModelNavigationService navigationService)
+        public MakeReservationViewModel(ReservationCacheStore cache, ViewModelNavigationService navigationService)
         {
-            SubmitCommand = new MakeReservationCommand(hotel, this, navigationService);
+            SubmitCommand = new MakeReservationCommand(cache, this, navigationService);
             CancelCommand = new NavigateCommand(navigationService);
         }
     }

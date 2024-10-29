@@ -15,22 +15,32 @@ namespace HotelRegistration.ViewModels
     public class ReservationListViewModel : ViewModelBase
     {
 
-        private readonly ObservableCollection<ReservationViewModel> _reservations;
-        public IEnumerable<ReservationViewModel> Reservations => _reservations;
+        private readonly ObservableCollection<ReservationViewModel> _reservationsObservable;
+        private readonly ReservationCacheStore _cache;
+
+        public IEnumerable<ReservationViewModel> Reservations => _reservationsObservable;
 
         public ICommand? NavigateToMakeReservationPage { get; }
         public ICommand? LoadCommand { get; }
 
-        public ReservationListViewModel(Hotel hotel, ViewModelNavigationService navigationService)
+        public ReservationListViewModel(ReservationCacheStore cache, ViewModelNavigationService navigationService)
         {
-            _reservations = new ObservableCollection<ReservationViewModel>();
-            LoadCommand = new LoadReservationsCommand(hotel, this);
+            _reservationsObservable = new ObservableCollection<ReservationViewModel>();
+
+            _cache = cache;
+
+            LoadCommand = new LoadReservationsCommand(_cache, this);
             NavigateToMakeReservationPage = new NavigateCommand(navigationService);
+
+            _cache.ReservationCreated += OnReservationMade;
+
         }
 
-        public static ReservationListViewModel LoadViewModel(Hotel hotel, ViewModelNavigationService navigationService)
+        public static ReservationListViewModel LoadViewModel(ReservationCacheStore cache, ViewModelNavigationService navigationService)
         {
-            ReservationListViewModel viewModel = new ReservationListViewModel(hotel, navigationService);
+
+
+            ReservationListViewModel viewModel = new ReservationListViewModel(cache, navigationService);
             viewModel.LoadCommand.Execute(null);
             return viewModel;
         }
@@ -38,14 +48,26 @@ namespace HotelRegistration.ViewModels
 
         public void UpdateReservations(IEnumerable<Reservation> reservations)
         {
-            _reservations.Clear();
+            _reservationsObservable.Clear();
 
             foreach (var reservation in reservations)
             {
                 ReservationViewModel reservationViewModel = new ReservationViewModel(reservation);
-                _reservations.Add(reservationViewModel);
+                _reservationsObservable.Add(reservationViewModel);
             }
 
+        }
+
+        public override void Dispose()
+        {
+            _cache.ReservationCreated -= OnReservationMade;
+            base.Dispose();
+        }
+
+        private void OnReservationMade(Reservation reservation)
+        {
+            ReservationViewModel reservationViewModel = new ReservationViewModel(reservation);
+            _reservationsObservable.Add(reservationViewModel);
         }
 
     }

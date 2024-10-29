@@ -22,6 +22,7 @@ namespace HotelRegistration
     {
         private readonly Hotel _hotel;
         private readonly NavigationStore _navigationStore;
+        private readonly ReservationCacheStore _cache;
 
         private const string connectionStringKey = "ReservationsDbConnection";
         // private string DB_CONNECTION_STRING => ConfigurationHelper.GetConnectionString(connectionStringKey);
@@ -38,6 +39,7 @@ namespace HotelRegistration
             ReservationBook reservationBook = new ReservationBook(reservationProvider, reservationCreator, conflictValidator);
 
             _hotel = new Hotel("Mongo Suites", reservationBook);
+            _cache = new ReservationCacheStore(_hotel);
             _navigationStore = new NavigationStore();
         }
         protected override void OnStartup(StartupEventArgs e)
@@ -64,12 +66,12 @@ namespace HotelRegistration
 
         private MakeReservationViewModel NavigateToMakeReservationViewModel()
         {
-            return new MakeReservationViewModel(_hotel, new ViewModelNavigationService(_navigationStore, NavigateToReservationViewModel));
+            return new MakeReservationViewModel(_cache, new ViewModelNavigationService(_navigationStore, NavigateToReservationViewModel));
         }
 
         private ReservationListViewModel NavigateToReservationViewModel()
         {
-            return ReservationListViewModel.LoadViewModel(_hotel, new ViewModelNavigationService(_navigationStore, NavigateToMakeReservationViewModel));
+            return ReservationListViewModel.LoadViewModel(_cache, new ViewModelNavigationService(_navigationStore, NavigateToMakeReservationViewModel));
         }
 
     }
