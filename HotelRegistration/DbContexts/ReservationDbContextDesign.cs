@@ -13,7 +13,8 @@ namespace HotelRegistration.DbContexts
 {
     public class ReservationDbContextDesign : IDesignTimeDbContextFactory<ReservationDbContext>
     {
-        private const string DB_CONNECTION_STRING = "Server=XXXXXXXXX;Database=XXXXXXXXX;Uid=XXXXXXXXX;Pwd=XXXXXXXXX;TrustServerCertificate=XXXXXXXXX;";
+        private const string connectionStringKey = "ReservationsDbConnection";
+        private string DB_CONNECTION_STRING => ConfigurationHelper.GetConnectionString(connectionStringKey);
         public ReservationDbContext CreateDbContext(string[] args)
         {
             ReservationDbContextFactory _dbContextFactory = new ReservationDbContextFactory(DB_CONNECTION_STRING);

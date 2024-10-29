@@ -22,7 +22,10 @@ namespace HotelRegistration
     {
         private readonly Hotel _hotel;
         private readonly NavigationStore _navigationStore;
-        private const string DB_CONNECTION_STRING = "Server=XXXXXXXXX;Database=HotelReservation;Uid=XXXXXXXX;Pwd=XXXXXXXXX;TrustServerCertificate=XXXXXXXXX;";
+
+        private const string connectionStringKey = "ReservationsDbConnection";
+        // private string DB_CONNECTION_STRING => ConfigurationHelper.GetConnectionString(connectionStringKey);
+        private string DB_CONNECTION_STRING => Environment.GetEnvironmentVariable(connectionStringKey); // adjust access from Azure KeyVault
         private ReservationDbContextFactory _dbContextFactory => new ReservationDbContextFactory(DB_CONNECTION_STRING);
 
         
@@ -39,8 +42,8 @@ namespace HotelRegistration
         }
         protected override void OnStartup(StartupEventArgs e)
         {
-
-            using(ReservationDbContext dbContext = _dbContextFactory.CreateDbContext())
+ 
+            using (ReservationDbContext dbContext = _dbContextFactory.CreateDbContext())
             {
                 if (!dbContext.HasTable(nameof(dbContext.Reservations)))
                 {
