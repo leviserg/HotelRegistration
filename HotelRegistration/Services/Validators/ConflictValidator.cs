@@ -27,9 +27,9 @@ namespace HotelRegistration.Services.Validators
                         r => 
                             r.RoomNumber == reservation.Room.RoomNumber
                             && r.FloorNumber == reservation.Room.FloorNumber
-                            && r.VisitorName != reservation.VisitorName
                             && r.StartDate <= reservation.EndDate
                             && r.EndDate >= reservation.StartDate
+                            // && r.VisitorName != reservation.VisitorName // no need to create new one with the same Visitor
                         )
                     .FirstOrDefaultAsync();
 

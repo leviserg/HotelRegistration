@@ -8,6 +8,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace HotelRegistration.ViewModels
@@ -19,6 +20,19 @@ namespace HotelRegistration.ViewModels
         private readonly ReservationCacheStore _cache;
 
         public IEnumerable<ReservationViewModel> Reservations => _reservationsObservable;
+
+        private bool isLoading;
+
+        public bool IsLoading
+        {
+            get { return isLoading; }
+            set {
+                isLoading = value;
+                OnPropertyChanged(nameof(IsLoading));
+            }
+        }
+
+
 
         public ICommand? NavigateToMakeReservationPage { get; }
         public ICommand? LoadCommand { get; }

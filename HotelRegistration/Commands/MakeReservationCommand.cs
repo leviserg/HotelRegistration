@@ -3,6 +3,7 @@ using HotelRegistration.Models;
 using HotelRegistration.Services;
 using HotelRegistration.Stores;
 using HotelRegistration.ViewModels;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -48,12 +49,16 @@ namespace HotelRegistration.Commands
 
                 MessageBox.Show($"Room successfully reserved,\n Reservation Id = {reservationId}", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
 
-                //_navigationService.Navigate();
+                _navigationService.Navigate();
 
             }
             catch (ReservationConflictException ex)
             {
-                MessageBox.Show("This room is already taken","Error", MessageBoxButton.OK, MessageBoxImage.Error);   
+                MessageBox.Show("This room is already taken","Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            catch (DbUpdateException ex)
+            {
+                MessageBox.Show("Failed to save record to Db", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             catch (Exception ex) {
                 Debug.WriteLine(ex.Message);
