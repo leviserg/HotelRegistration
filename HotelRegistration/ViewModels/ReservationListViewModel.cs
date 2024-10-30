@@ -32,6 +32,21 @@ namespace HotelRegistration.ViewModels
             }
         }
 
+        private string errorMessage;
+
+        public string ErrorMessage
+        {
+            get { return errorMessage; }
+            set {
+                errorMessage = value;
+                OnPropertyChanged(nameof (ErrorMessage));
+                OnPropertyChanged(nameof(HasErrorMessage));
+
+            }
+        }
+
+        public bool HasErrorMessage => !string.IsNullOrEmpty(ErrorMessage);
+
 
 
         public ICommand? NavigateToMakeReservationPage { get; }

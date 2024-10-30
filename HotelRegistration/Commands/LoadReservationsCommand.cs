@@ -28,18 +28,18 @@ namespace HotelRegistration.Commands
 
         public override async Task ExecuteAsync(object parameter)
         {
+            _viewModel.ErrorMessage = string.Empty;
             _viewModel.IsLoading = true;
             try
             {
 
                 await _cache.Load();
                 _viewModel.UpdateReservations(_cache.Reservations);
-                await Task.CompletedTask;
+
             }
             catch (Exception ex) {
                 Debug.WriteLine(ex.Message);
-                MessageBox.Show("Failed to load reservations", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-               // throw;
+                _viewModel.ErrorMessage = "Failed to load reservations";
             }
 
             _viewModel.IsLoading = false;

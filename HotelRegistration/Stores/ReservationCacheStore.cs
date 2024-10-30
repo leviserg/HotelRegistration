@@ -11,7 +11,7 @@ namespace HotelRegistration.Stores
     {
         private readonly List<Reservation> _reservations;
         private readonly Hotel _hotel;
-        private readonly Lazy<Task> _initializeLazyLoad; // threadsafe
+        private Lazy<Task> _initializeLazyLoad; // threadsafe
 
         public IEnumerable<Reservation> Reservations => _reservations;
         public event Action<Reservation> ReservationCreated;
@@ -41,7 +41,16 @@ namespace HotelRegistration.Stores
 
         public async Task Load()
         {
-            await _initializeLazyLoad.Value;
+            try
+            {
+                await _initializeLazyLoad.Value;
+            }
+            catch (Exception)
+            {
+                _initializeLazyLoad = new Lazy<Task>(Initialize);
+                throw;
+            }
+
         }
 
         private async Task Initialize()

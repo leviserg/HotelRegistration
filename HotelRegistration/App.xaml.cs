@@ -44,7 +44,7 @@ namespace HotelRegistration
         }
         protected override void OnStartup(StartupEventArgs e)
         {
- 
+ /*
             using (ReservationDbContext dbContext = _dbContextFactory.CreateDbContext())
             {
                 if (!dbContext.HasTable(nameof(dbContext.Reservations)))
@@ -52,7 +52,7 @@ namespace HotelRegistration
                     dbContext.Database.Migrate();
                 }
             }
-
+ */
             _navigationStore.CurrentViewModel = NavigateToReservationViewModel();
 
             MainWindow = new MainWindow()

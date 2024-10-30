@@ -22,7 +22,6 @@ namespace HotelRegistration.Services.ReservationProviders
 
         public async Task<IEnumerable<Reservation>> GetReservationsAsync()
         {
-            await Task.Delay(2000);
             using (ReservationDbContext context = _dbContextFactory.CreateDbContext())
             {
                 var reservationDTOs = await context.Reservations.ToListAsync();
