@@ -1,20 +1,13 @@
-﻿using HotelRegistration.Models;
-using HotelRegistration.Services;
-using HotelRegistration.Stores;
+﻿using HotelRegistration.Services;
 using HotelRegistration.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HotelRegistration.Commands
 {
-    public class NavigateCommand : CommandBase
+    public class NavigateCommand<TViewModel> : CommandBase where TViewModel : ViewModelBase
     {
-        private readonly ViewModelNavigationService _navigationService;
+        private readonly ViewModelNavigationService<TViewModel> _navigationService;
 
-        public NavigateCommand(ViewModelNavigationService navigationService)
+        public NavigateCommand(ViewModelNavigationService<TViewModel> navigationService)
         {
             _navigationService = navigationService;
         }

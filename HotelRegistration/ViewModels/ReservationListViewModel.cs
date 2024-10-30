@@ -2,13 +2,7 @@
 using HotelRegistration.Models;
 using HotelRegistration.Services;
 using HotelRegistration.Stores;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Input;
 
 namespace HotelRegistration.ViewModels
@@ -52,23 +46,21 @@ namespace HotelRegistration.ViewModels
         public ICommand? NavigateToMakeReservationPage { get; }
         public ICommand? LoadCommand { get; }
 
-        public ReservationListViewModel(ReservationCacheStore cache, ViewModelNavigationService navigationService)
+        public ReservationListViewModel(ReservationCacheStore cache, ViewModelNavigationService<MakeReservationViewModel> navigationService)
         {
             _reservationsObservable = new ObservableCollection<ReservationViewModel>();
 
             _cache = cache;
 
             LoadCommand = new LoadReservationsCommand(_cache, this);
-            NavigateToMakeReservationPage = new NavigateCommand(navigationService);
+            NavigateToMakeReservationPage = new NavigateCommand<MakeReservationViewModel>(navigationService);
 
             _cache.ReservationCreated += OnReservationMade;
 
         }
 
-        public static ReservationListViewModel LoadViewModel(ReservationCacheStore cache, ViewModelNavigationService navigationService)
+        public static ReservationListViewModel LoadViewModel(ReservationCacheStore cache, ViewModelNavigationService<MakeReservationViewModel> navigationService)
         {
-
-
             ReservationListViewModel viewModel = new ReservationListViewModel(cache, navigationService);
             viewModel.LoadCommand.Execute(null);
             return viewModel;

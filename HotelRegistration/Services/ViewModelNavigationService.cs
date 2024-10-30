@@ -1,19 +1,14 @@
 ﻿using HotelRegistration.Stores;
 using HotelRegistration.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HotelRegistration.Services
 {
-    public class ViewModelNavigationService
+    public class ViewModelNavigationService<TViewModel> where TViewModel : ViewModelBase
     {
         private readonly NavigationStore _navigationStore;
-        private readonly Func<ViewModelBase> _navigateTo;
+        private readonly Func<TViewModel> _navigateTo;
 
-        public ViewModelNavigationService(NavigationStore navigationStore, Func<ViewModelBase> navigateTo)
+        public ViewModelNavigationService(NavigationStore navigationStore, Func<TViewModel> navigateTo)
         {
             _navigationStore = navigationStore;
             _navigateTo = navigateTo;

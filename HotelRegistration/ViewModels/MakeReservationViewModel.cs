@@ -1,14 +1,8 @@
 ﻿using HotelRegistration.Commands;
-using HotelRegistration.Models;
 using HotelRegistration.Services;
 using HotelRegistration.Stores;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Input;
 
 namespace HotelRegistration.ViewModels
@@ -97,10 +91,10 @@ namespace HotelRegistration.ViewModels
 
         #endregion
 
-        public MakeReservationViewModel(ReservationCacheStore cache, ViewModelNavigationService navigationService)
+        public MakeReservationViewModel(ReservationCacheStore cache, ViewModelNavigationService<ReservationListViewModel> navigationService)
         {
             SubmitCommand = new MakeReservationCommand(cache, this, navigationService);
-            CancelCommand = new NavigateCommand(navigationService);
+            CancelCommand = new NavigateCommand<ReservationListViewModel>(navigationService);
             _propertyNameToErrorDictionary = new Dictionary<string, List<string>>();
         }
 

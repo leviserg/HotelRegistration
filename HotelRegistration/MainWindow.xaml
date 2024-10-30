@@ -9,9 +9,11 @@
         xmlns:viewModels="clr-namespace:HotelRegistration.ViewModels"
         
         mc:Ignorable="d"
-        Title="Hotel registration" 
+        Title="Hotel registration"
         FontSize="14"
-        Height="450" Width="800">
+        Height="450" Width="800"
+        Icon="pack://application:,,,/./Resources/appicon.ico"
+        >
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="20 10" MaxWidth="600">
             <Grid.Resources>

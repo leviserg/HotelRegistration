@@ -78,3 +78,8 @@ Data Persistance w EntityFramework
 	PM > add-migration Initial  (undo - Remove-Migration)
 	PM > update-database (remove - if applied - Remove-Migration -Force)
 	
+4. Hosting WPF App:
+	Install Microsoft.Extensions.Hosting NuGet package
+	in App.xaml.xs add Host Builder
+		
+		
