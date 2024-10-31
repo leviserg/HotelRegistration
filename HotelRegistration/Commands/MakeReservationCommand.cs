@@ -28,14 +28,13 @@ namespace HotelRegistration.Commands
 
         public override bool CanExecute(object parameter)
         {
-            return !string.IsNullOrEmpty(_viewModel.VisitorName)
-                && _viewModel.FloorNumber > 0
-                && _viewModel.RoomNumber > 0
-                && base.CanExecute(parameter);
+            return _viewModel.CanCreateReservation && base.CanExecute(parameter);
         }
 
         public override async Task ExecuteAsync(object parameter)
         {
+            _viewModel.SubmitErrorMessage = string.Empty;
+            _viewModel.IsSubmitting = true;
 
             try
             {
@@ -50,17 +49,25 @@ namespace HotelRegistration.Commands
             }
             catch (ReservationConflictException ex)
             {
-                MessageBox.Show("This room is already taken","Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                // MessageBox.Show("This room is already taken","Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                _viewModel.SubmitErrorMessage = "This room is already taken";
+            }
+            catch (InvalidDateRangeException ex)
+            {
+                // MessageBox.Show("This room is already taken","Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                _viewModel.SubmitErrorMessage = "Start date must be before end date";
             }
             catch (DbUpdateException ex)
             {
-                MessageBox.Show("Failed to save record to Db", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                //MessageBox.Show("Failed to save record to Db", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                _viewModel.SubmitErrorMessage = "Failed to save record to Db";
             }
             catch (Exception ex) {
-                Debug.WriteLine(ex.Message);
-                MessageBox.Show("Failed to make reservation", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Program execution failed:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 throw;
             }
+
+            _viewModel.IsSubmitting = false;
 
         }
 

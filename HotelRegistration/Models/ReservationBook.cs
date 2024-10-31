@@ -65,6 +65,12 @@ namespace HotelRegistration.Models
             if (existingReservation is not null) {
                 throw new ReservationConflictException(existingReservation, reservation);
             }
+
+            if (reservation.StartDate > reservation.EndDate)
+            {
+                throw new InvalidDateRangeException(reservation);
+            }
+
             return await _reservationCreator.CreateReservationAsync(reservation);
         }
     }

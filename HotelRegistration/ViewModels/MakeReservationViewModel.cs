@@ -12,19 +12,29 @@ namespace HotelRegistration.ViewModels
 
         #region Properties
 
-        private string? _visitorName;
-        private int _floorNumber;
+        private string _visitorName;
+        private int _floorNumber = 1;
         private int _roomNumber;
         private DateTime? _startDate = DateTime.Now;
         private DateTime? _endDate = DateTime.Now.AddDays(3);
 
         public string VisitorName
         {
-            get => _visitorName ?? string.Empty;
+            get { return _visitorName; }
             set
             {
                 _visitorName = value;
                 OnPropertyChanged(nameof(VisitorName));
+
+                ClearErrors(nameof(VisitorName));
+
+                if (!HasUsername)
+                {
+                    AddError("Visitor name cannot be empty.", nameof(VisitorName));
+                }
+
+                OnPropertyChanged(nameof(CanCreateReservation));
+
             }
         }
 
@@ -35,6 +45,15 @@ namespace HotelRegistration.ViewModels
             {
                 _floorNumber = value;
                 OnPropertyChanged(nameof(FloorNumber));
+
+                ClearErrors(nameof(FloorNumber));
+
+                if (!HasFloorNumberGreaterThanZero)
+                {
+                    AddError("Floor number must be greater than zero.", nameof(FloorNumber));
+                }
+
+                OnPropertyChanged(nameof(CanCreateReservation));
             }
         }
 
@@ -61,6 +80,8 @@ namespace HotelRegistration.ViewModels
                 {
                     AddError(nameof(StartDate), $"The start date of {StartDate?.ToString("dd.MM.yyyy")} can't be greater than end date of {EndDate?.ToString("dd.MM.yyyy")}");
                 }
+
+                OnPropertyChanged(nameof(CanCreateReservation));
             }
         }
 
@@ -82,11 +103,37 @@ namespace HotelRegistration.ViewModels
                     AddError(nameof(EndDate), $"The end date of {EndDate?.ToString("dd.MM.yyyy")} can't be less than start date of {StartDate?.ToString("dd.MM.yyyy")}");
                 }
 
-
+                OnPropertyChanged(nameof(CanCreateReservation));
             }
         }
 
-        public ICommand SubmitCommand { get; }
+        public bool CanCreateReservation =>
+            HasUsername &&
+            HasFloorNumberGreaterThanZero &&
+            HasStartDateBeforeEndDate &&
+            !HasErrors;
+
+        private bool HasUsername => !string.IsNullOrEmpty(VisitorName);
+        private bool HasFloorNumberGreaterThanZero => FloorNumber > 0;
+        private bool HasStartDateBeforeEndDate => StartDate < EndDate;
+
+        private bool _isSubmitting;
+
+        public bool IsSubmitting
+        {
+            get
+            {
+                return _isSubmitting;
+            }
+            set
+            {
+                _isSubmitting = value;
+                OnPropertyChanged(nameof(IsSubmitting));
+            }
+        }
+
+
+        public AsyncCommandBase SubmitCommand { get; }
         public ICommand CancelCommand { get; }
 
         #endregion
@@ -105,6 +152,23 @@ namespace HotelRegistration.ViewModels
         public event EventHandler<DataErrorsChangedEventArgs>? ErrorsChanged;
 
         public bool HasErrors => _propertyNameToErrorDictionary.Any();
+
+        private string _submitErrorMessage;
+        public string SubmitErrorMessage
+        {
+            get
+            {
+                return _submitErrorMessage;
+            }
+            set
+            {
+                _submitErrorMessage = value;
+                OnPropertyChanged(nameof(SubmitErrorMessage));
+
+                OnPropertyChanged(nameof(HasSubmitErrorMessage));
+            }
+        }
+        public bool HasSubmitErrorMessage => !string.IsNullOrEmpty(SubmitErrorMessage);
 
         public IEnumerable GetErrors(string propertyName)
         {

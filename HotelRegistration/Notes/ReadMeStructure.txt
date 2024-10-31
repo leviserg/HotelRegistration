@@ -82,4 +82,14 @@ Data Persistance w EntityFramework
 	Install Microsoft.Extensions.Hosting NuGet package
 	in App.xaml.xs add Host Builder
 		
+5. PUBLISH
+	select project in VS 2022 - run command - "Open in Terminal"
+	
+	- dotnet publish -c Release { all app files within YourProject/bin/Release folder}
+	
+	- dotnet publish -c Release --self-contained {when no proper .net runtime version can be found on target PC}
+		if failed - add <RuntimeIdentifier> key to your *.csproj PropertyGroup list - EG <RuntimeIdentifier>win-x64</RuntimeIdentifier> {find more on https://learn.microsoft.com/en-us/dotnet/core/rid-catalog}
+		- all the executable files + runtime files within bin/Release/{targetPlatform - eg - net8.0-windows}/{target runtime identifier eg win-x64}/publish
 		
+	- dotnet publish -c Release --self-contained -p:PublishSingleFile=true
+	
